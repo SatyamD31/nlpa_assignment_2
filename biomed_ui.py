@@ -52,7 +52,7 @@ input_text = st.text_area("Enter Biomedical Text:", placeholder="Type or paste t
 # Multi-select Dropdown for Entity Types
 entity_options = ["Genes", "Proteins", "Diseases", "Drugs", "Tissues"]
 selected_entities = st.multiselect(
-    "Select Entities to display Relations for (Choose nothing to extract all Entity-Relations by Default):",
+    "Select Entities to display Relations for (Choose nothing to extract all Relations by Default):",
     entity_options,
     default=[]
 )
@@ -69,6 +69,24 @@ if st.button("Extract Relations"):
         st.rerun()  # Refresh to display the input immediately
     else:
         st.warning("Please enter some biomedical text.")
+
+
+# If loading, simulate the API call and update the last entry with relations
+if st.session_state.loading:
+    with st.spinner("Extracting relations..."):
+        # Get the last input details
+        last_input = st.session_state.chat_history[-1]
+        
+        # Dummy API Call for Relation Extraction
+        relations = dummy_relation_extraction(last_input["text"])
+        
+        # Update the last chat history item with the extracted relations
+        st.session_state.chat_history[-1]["relations"] = relations
+    
+    # Stop loading and refresh to show the relations
+    st.session_state.loading = False
+    st.rerun()
+
 
 # Display Chat History
 for chat in reversed(st.session_state.chat_history):
@@ -108,19 +126,3 @@ for chat in reversed(st.session_state.chat_history):
         st.markdown("_Processing..._")
 
     st.divider()
-
-# If loading, simulate the API call and update the last entry with relations
-if st.session_state.loading:
-    with st.spinner("Extracting relations..."):
-        # Get the last input details
-        last_input = st.session_state.chat_history[-1]
-        
-        # Dummy API Call for Relation Extraction
-        relations = dummy_relation_extraction(last_input["text"])
-        
-        # Update the last chat history item with the extracted relations
-        st.session_state.chat_history[-1]["relations"] = relations
-    
-    # Stop loading and refresh to show the relations
-    st.session_state.loading = False
-    st.rerun()
