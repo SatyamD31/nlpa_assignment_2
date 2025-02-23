@@ -50,7 +50,7 @@ st.title("Biomedical Relation Extraction")
 input_text = st.text_area("Enter Biomedical Text:", placeholder="Type or paste text here...")
 
 # Multi-select Dropdown for Entity Types
-entity_options = ["Genes", "Proteins", "Diseases", "Drugs", "Tissues"]
+entity_options = ["DUMMY", "Genes", "Proteins", "Diseases", "Drugs", "Tissues"]
 selected_entities = st.multiselect(
     "Select Entities to display Relations for (Choose nothing to extract all Relations by Default):",
     entity_options,
